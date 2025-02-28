@@ -1,0 +1,13 @@
+# Python Temporary Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+
+# Virtual Environment
+venv/
+env/
+myenv/
