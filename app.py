@@ -5,7 +5,7 @@ import numpy as np
 from rembg import remove
 from io import BytesIO
 
-# Custom CSS for styling
+
 TAILWIND_STYLE = '''
 <style>
 .stButton > button {
@@ -28,15 +28,13 @@ st.title("🤖📸AI-Powered Image Editor🤳")
 
 uploaded_img = st.file_uploader("Upload an Image", type=["png", "jpg", "jpeg"])
 
-# Convert PIL Image to OpenCV Format
 def pil_to_cv(image):
     return cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
-# Convert OpenCV Image to PIL Format
+
 def cv_to_pil(image):
     return Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
-# Resize Image to fit within a maximum size
 def resize_image(image, max_size=500):
     img = np.array(image)
     h, w = img.shape[:2]
@@ -75,19 +73,17 @@ if uploaded_img:
     st.write("Original Image Dimensions:", image.size)
 
     # Resize the image to fit within the visible area
-    image = resize_image(image, max_size=500)  # Resize to a maximum of 500px
+    image = resize_image(image, max_size=500)
     st.write("Resized Image Dimensions:", image.size)
 
-    # Display the original image with a fixed maximum width
     st.image(image, caption="Original Image", use_container_width=True)
 
-    # Crop Image Option
     if st.checkbox("Crop Image to Square"):
         image = crop_image(image)
         st.write("Cropped Image Dimensions:", image.size)
         st.image(image, caption="Cropped Image", use_container_width=True)
 
-    # Filter Options
+
     filter_option = st.selectbox("Select a Filter", ["None", "Grayscale", "Blur", "Remove Background"])
 
     if st.button("Apply Filter"):
@@ -98,17 +94,14 @@ if uploaded_img:
         elif filter_option == "Remove Background":
             image = remove_bg(image)
 
-        # Resize the processed image to ensure it fits within the visible area
         image = resize_image(image, max_size=500)
         st.write("Processed Image Dimensions:", image.size)
 
-        # Show Processed Image with a fixed maximum width
         st.image(image, caption="Edited Image", use_container_width=True)
 
-        # Save Image for Download
         img_bytes = BytesIO()
         image.save(img_bytes, format="PNG")
         img_bytes.seek(0)
 
-        # Download Button
+
         st.download_button("Download Edited Image", data=img_bytes, file_name="edited_img.png", mime="image/png")
